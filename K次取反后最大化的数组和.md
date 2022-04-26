@@ -1,0 +1,66 @@
+K次取反后最大化的数组和
+
+思路：首先将数组中的最大绝对值负数取反，当数组中所有数都变成正数时，如果k还大于0，此时依次将数组中的最小值变为负。然后重复对这个数进行取反。
+
+```C++
+class Solution {
+public:
+    int largestSumAfterKNegations(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());//确保数组如果存在负数时，先对最大绝对值的负数先取反
+        for(int i = 0; i < nums.size(); ++i){
+            if(nums[i] < 0){
+                if(k <= 0){
+                    break;
+                }
+                nums[i] = -1 * nums[i];
+                --k;
+            }
+        }
+        if(k > 0){//当负数都转变为正数了，K依然大于0，对数组中最小正数重复取反，直到k取0
+            sort(nums.begin(), nums.end());
+            while(k--){
+                nums[0] = -1 * nums[0];
+            }
+        }
+        int sum = 0;
+        for(int i = 0; i < nums.size(); ++i){
+            sum += nums[i];
+        }
+        return sum;
+    }
+};
+```
+
+该题使用两次贪心思路：（1）让绝对值大的负数变为正数，当前数值达到最大，整个数组和达到最大；（2）如果负数都转变为正数，K依然大于0，则只找数值最小的正整数进行反转，直到K取0。
+
+```C++
+class Solution {
+public:
+    //按绝对值从大到小排列
+    static bool cmp(int a, int b){
+        return abs(a) > abs(b);
+    }
+    int largestSumAfterKNegations(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end(), cmp);
+        for(int i = 0; i < nums.size(); ++i){
+            if(k <= 0){
+                break;
+            }
+            if(nums[i] < 0){
+                nums[i] *= -1;
+                --k;
+            }
+        }
+        if(k % 2 == 1){
+            nums[nums.size() - 1] *= -1;
+        }
+        int sum = 0;
+        for(int i : nums){
+            sum += i;
+        }
+        return sum;
+    }
+};
+```
+
+因为文中是使用快排，仔细看题，题目中限定了数据范围是正负一百，所以可以使用桶排序。这样时间复杂度为O(n)。
