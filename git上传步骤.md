@@ -10,7 +10,7 @@ git push origin :master #删除远程master分支，不是默认分支
 
 ```bash
 git add . #上传本目录中所有文件，添加进仓库
-git commit -m "注释" 
+git commit -m "first commit" 
 git remote add origin git@github.com:kingdom-l/Data_Structures_and_Algorithms.git
 git push -u origin main #把代码上传到GitHub仓库
 ```
